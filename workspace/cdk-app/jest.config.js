@@ -4,7 +4,13 @@ const config = {
   roots: ['<rootDir>/test'],
   testMatch: ['**/*.test.ts'],
   transform: {
-    '^.+\\.tsx?$': 'ts-jest',
+    '^.+\\.tsx?$': [
+      'esbuild-jest',
+      {
+        sourcemap: true,
+      },
+    ],
+    // '^.+\\.tsx?$': 'ts-jest',
   },
   snapshotSerializers: ['<rootDir>/test/plugins/ignore-asset-hash.ts'],
 };
