@@ -3,7 +3,11 @@ import 'source-map-support';
 import { Logger } from '@aws-lambda-powertools/logger';
 import { MetricUnits, Metrics } from '@aws-lambda-powertools/metrics';
 import { Tracer } from '@aws-lambda-powertools/tracer';
-import type { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
+import type {
+  APIGatewayProxyEvent,
+  APIGatewayProxyResult,
+  Context,
+} from 'aws-lambda';
 
 const serviceName = 'hello-world-get'; // TMP
 
@@ -16,6 +20,7 @@ const metrics = new Metrics({
 
 export const lambdaHandler = async (
   _event: APIGatewayProxyEvent,
+  _context: Context,
 ): Promise<APIGatewayProxyResult> => {
   tracer.getSegment();
 
