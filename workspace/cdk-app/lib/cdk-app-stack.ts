@@ -1,4 +1,5 @@
 import path from 'node:path';
+import url from 'node:url';
 import {
   Duration,
   Stack,
@@ -7,13 +8,16 @@ import {
   aws_lambda as lambda,
 } from 'aws-cdk-lib';
 import {
-  type ICommandHooks,
+  // type ICommandHooks,
   NodejsFunction,
   type NodejsFunctionProps,
   OutputFormat,
 } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Construct } from 'constructs';
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
+
+// const __filename = url.fileURLToPath(import.meta.url);
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 const esmBanner =
   'import { createRequire as topLevelCreateRequire } from "module"; import url from "url"; const require = topLevelCreateRequire(import.meta.url); const __filename = url.fileURLToPath(import.meta.url); const __dirname = url.fileURLToPath(new URL(".", import.meta.url));';
