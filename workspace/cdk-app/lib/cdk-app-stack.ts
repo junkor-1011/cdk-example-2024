@@ -20,7 +20,7 @@ import { Construct } from 'constructs';
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 const esmBanner =
-  'import { createRequire as topLevelCreateRequire } from "module"; import url from "url"; const require = topLevelCreateRequire(import.meta.url); const __filename = url.fileURLToPath(import.meta.url); const __dirname = url.fileURLToPath(new URL(".", import.meta.url));';
+  'import { createRequire as topLevelCreateRequire } from "node:module"; import url from "node:url"; const require = topLevelCreateRequire(import.meta.url); const __filename = url.fileURLToPath(import.meta.url); const __dirname = url.fileURLToPath(new URL(".", import.meta.url));';
 
 const lambdaNodejsBundlingOption = {
   sourceMap: true,
