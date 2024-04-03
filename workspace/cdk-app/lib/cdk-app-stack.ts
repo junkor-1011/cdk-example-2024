@@ -18,6 +18,8 @@ import {
 import type { Construct } from 'constructs';
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 
+import { CommonWafSetting } from './utility-constructs/waf';
+
 // const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -70,5 +72,10 @@ export class CdkAppStack extends Stack {
     api.root
       .addResource('hello')
       .addMethod('GET', new apigateway.LambdaIntegration(helloFunction));
+
+    new CommonWafSetting(this, 'API-WAF', {
+      scope: 'REGIONAL',
+      targetArnList: [api.deploymentStage.stageArn],
+    });
   }
 }
