@@ -2,10 +2,12 @@ import path from 'node:path';
 import url from 'node:url';
 import {
   Duration,
+  RemovalPolicy,
   Stack,
   type StackProps,
   aws_apigateway as apigateway,
   aws_lambda as lambda,
+  aws_logs as logs,
 } from 'aws-cdk-lib';
 import {
   // type ICommandHooks,
@@ -13,7 +15,7 @@ import {
   type NodejsFunctionProps,
   OutputFormat,
 } from 'aws-cdk-lib/aws-lambda-nodejs';
-import { Construct } from 'constructs';
+import type { Construct } from 'constructs';
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 
 // const __filename = url.fileURLToPath(import.meta.url);
@@ -53,6 +55,16 @@ export class CdkAppStack extends Stack {
 
     const api = new apigateway.RestApi(this, 'webapi', {
       restApiName: 'hello-world-api',
+      deployOptions: {
+        dataTraceEnabled: true,
+        loggingLevel: apigateway.MethodLoggingLevel.INFO,
+        accessLogDestination: new apigateway.LogGroupLogDestination(
+          new logs.LogGroup(this, 'hello-world-api-logs', {
+            removalPolicy: RemovalPolicy.DESTROY,
+          }),
+        ),
+        accessLogFormat: apigateway.AccessLogFormat.jsonWithStandardFields(),
+      },
     });
 
     api.root

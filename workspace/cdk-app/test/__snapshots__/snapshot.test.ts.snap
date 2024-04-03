@@ -38,6 +38,14 @@ exports[`snapshot test 1`] = `
     },
   },
   "Resources": {
+    "helloworldapilogsFDCE257B": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "RetentionInDays": 731,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
     "helloworldfunction8252912C": {
       "DependsOn": [
         "helloworldfunctionServiceRole0327FCC6",
@@ -165,9 +173,26 @@ exports[`snapshot test 1`] = `
         "webapiAccount1B71C2D2",
       ],
       "Properties": {
+        "AccessLogSetting": {
+          "DestinationArn": {
+            "Fn::GetAtt": [
+              "helloworldapilogsFDCE257B",
+              "Arn",
+            ],
+          },
+          "Format": "{"requestId":"$context.requestId","ip":"$context.identity.sourceIp","user":"$context.identity.user","caller":"$context.identity.caller","requestTime":"$context.requestTime","httpMethod":"$context.httpMethod","resourcePath":"$context.resourcePath","status":"$context.status","protocol":"$context.protocol","responseLength":"$context.responseLength"}",
+        },
         "DeploymentId": {
           "Ref": "webapiDeployment17CB5080176caf9e2050ae4c1363efc7d62644ac",
         },
+        "MethodSettings": [
+          {
+            "DataTraceEnabled": true,
+            "HttpMethod": "*",
+            "LoggingLevel": "INFO",
+            "ResourcePath": "/*",
+          },
+        ],
         "RestApiId": {
           "Ref": "webapiFE47F609",
         },
