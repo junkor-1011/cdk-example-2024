@@ -1,7 +1,7 @@
-import 'source-map-support';
+import 'source-map-support/register';
 
 import { Logger } from '@aws-lambda-powertools/logger';
-import { MetricUnits, Metrics } from '@aws-lambda-powertools/metrics';
+import { MetricUnit, Metrics } from '@aws-lambda-powertools/metrics';
 import { Tracer } from '@aws-lambda-powertools/tracer';
 import type {
   APIGatewayProxyEvent,
@@ -24,7 +24,7 @@ export const lambdaHandler = async (
 ): Promise<APIGatewayProxyResult> => {
   tracer.getSegment();
 
-  metrics.addMetric('lambdaInvoke', MetricUnits.Count, 1);
+  metrics.addMetric('lambdaInvoke', MetricUnit.Count, 1);
   logger.info('lambda init');
 
   const response = {
