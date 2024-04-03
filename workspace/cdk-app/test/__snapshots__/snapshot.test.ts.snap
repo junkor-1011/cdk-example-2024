@@ -38,6 +38,42 @@ exports[`snapshot test 1`] = `
     },
   },
   "Resources": {
+    "APIWAFCommonWafWebACLLoggingConfigREGIONAL375928D0": {
+      "DependsOn": [
+        "APIWAFawswaflogsREGIONALC19EF707",
+        "APIWAFCommonWafWebACLREGIONAL050FADD1",
+      ],
+      "Properties": {
+        "LogDestinationConfigs": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:logs:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":log-group:",
+                {
+                  "Ref": "APIWAFawswaflogsREGIONALC19EF707",
+                },
+              ],
+            ],
+          },
+        ],
+        "ResourceArn": {
+          "Fn::GetAtt": [
+            "APIWAFCommonWafWebACLREGIONAL050FADD1",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::WAFv2::LoggingConfiguration",
+    },
     "APIWAFCommonWafWebACLREGIONAL050FADD1": {
       "Properties": {
         "DefaultAction": {
@@ -160,10 +196,19 @@ exports[`snapshot test 1`] = `
       },
       "Type": "AWS::WAFv2::WebACLAssociation",
     },
+    "APIWAFawswaflogsREGIONALC19EF707": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "LogGroupName": "aws-waf-logs-common-acl-REGIONAL",
+        "RetentionInDays": 60,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
     "helloworldapilogsFDCE257B": {
       "DeletionPolicy": "Delete",
       "Properties": {
-        "RetentionInDays": 731,
+        "RetentionInDays": 60,
       },
       "Type": "AWS::Logs::LogGroup",
       "UpdateReplacePolicy": "Delete",

@@ -1,7 +1,12 @@
 // import path from 'node:path';
 // import { fileURLToPath } from 'node:url';
 
-import { aws_wafv2 as wafv2 } from 'aws-cdk-lib';
+import {
+  Aws,
+  RemovalPolicy,
+  aws_logs as logs,
+  aws_wafv2 as wafv2,
+} from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 
 // const __filename = fileURLToPath(import.meta.url);
@@ -93,6 +98,25 @@ export class CommonWafSetting extends Construct {
         },
       ],
     });
+
+    const logGroup = new logs.LogGroup(this, `aws-waf-logs-${props.scope}`, {
+      logGroupName: `aws-waf-logs-common-acl-${props.scope}`,
+      removalPolicy: RemovalPolicy.DESTROY,
+      retention: logs.RetentionDays.TWO_MONTHS,
+    });
+
+    const loggingConfig = new wafv2.CfnLoggingConfiguration(
+      this,
+      `CommonWafWebACL-LoggingConfig-${props.scope}`,
+      {
+        logDestinationConfigs: [
+          `arn:aws:logs:${Aws.REGION}:${Aws.ACCOUNT_ID}:log-group:${logGroup.logGroupName}`,
+        ],
+        resourceArn: webAcl.attrArn,
+      },
+    );
+    loggingConfig.node.addDependency(webAcl);
+    loggingConfig.node.addDependency(logGroup);
 
     props.targetArnList.forEach((targetArn, index) => {
       new wafv2.CfnWebACLAssociation(

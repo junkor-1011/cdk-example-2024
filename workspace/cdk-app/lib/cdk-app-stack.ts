@@ -63,6 +63,7 @@ export class CdkAppStack extends Stack {
         accessLogDestination: new apigateway.LogGroupLogDestination(
           new logs.LogGroup(this, 'hello-world-api-logs', {
             removalPolicy: RemovalPolicy.DESTROY,
+            retention: logs.RetentionDays.TWO_MONTHS,
           }),
         ),
         accessLogFormat: apigateway.AccessLogFormat.jsonWithStandardFields(),
